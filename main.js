@@ -1,3 +1,7 @@
+/*
+ * Logo graphics interpreter
+ * matt@smith-stubbs.com
+ */
 
 var Tokenize = function(src) {
   var self = this,
