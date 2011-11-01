@@ -11,21 +11,23 @@ var Tokenize = function(src) {
 
   tokens.forEach(function(token) {
     var parsedToken = self.parse(token);
+
     if (parsedToken !== false) {
       matched.push(parsedToken);
     } else {
       console.error('Syntax error: ' + token);
     }
+
   });
 
   return matched;
-}
+};
 
 Tokenize.prototype = {
   GRAMMAR: [    // valid expressions
     /(penup|pendown)/,
-    /((forward|backward|right|left)(\s)+(\d)+)/,
-    /color\s#[a-fA-F0-9]{6}/
+    /color\s#[a-fA-F0-9]{6}/,
+    /((forward|backward|right|left)(\s)+(\d)+)/
   ],
 
   parse: function(token) {
@@ -97,7 +99,6 @@ Render.prototype = {
     this.ctx.stroke();
     this.ctx.strokeStyle = val;
     this.ctx.beginPath();
-    // this.ctx.moveTo(this.x, this.y);
   },
 
  drawLine: function(dist, degrees) {
@@ -105,7 +106,7 @@ Render.prototype = {
    this.x = this.x + Math.cos(this.toRad(this.heading)) * dist;
    this.y = this.y + Math.sin(this.toRad(this.heading)) * dist;
 
-   this.draw ? this.ctx.lineTo(this.x, this.y) 
+   this.draw ? this.ctx.lineTo(this.x, this.y)
              : this.ctx.moveTo(this.x, this.y);
  },
 
@@ -122,21 +123,20 @@ Render.prototype = {
  },
 
  toRad: function(degrees) {
-  return degrees * (3.14 / 180);
+  return degrees * (Math.PI / 180);
  }
-
-}
+};
 
 function init() {
   var canvas = document.querySelector('canvas'),
       textarea = document.querySelectorAll('textarea')[0];
-
-  var run = function() {
-    var commands = new Tokenize(textarea.value);
-    render = new Render(canvas, commands);
-  };
+      run = function() {
+        var commands = new Tokenize(textarea.value);
+        render = new Render(canvas, commands);
+      };
 
   document.querySelector('button').onclick = run;
+
   run();
 }
 
